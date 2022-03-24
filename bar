@@ -1,0 +1,75 @@
+#!/bin/env bash
+
+printDate (){ 
+    date "+%R %a %d" 
+}
+
+raam (){
+    #echo $(inxi -jm | awk 'NR==2 {print "╠  "$6" : "$3 "  ╍ "};NR==6 {print $9" : "$6"  ╣"}') &
+    echo $(inxi -jm | awk 'NR==2 {print $6};NR==6 {print $9}') &
+    
+}  
+
+keylayout (){
+    
+    ( ([[ $(xset -q|grep LED| awk '{ print $10 }') == "00000000" ]] && echo 'num lock') ||
+        ( [[ $(xset -q|grep LED| awk '{ print $10 }') == "00000002" ]] && echo 'en' ) || 
+        ( [[ $(xset -q|grep LED| awk '{ print $10 }') == "00001002" ]] && echo 'ar' ) 
+    ) || echo 'unknown' &
+
+}
+
+battery (){
+
+    # BAT1 maybe diff
+    togg=$(upower -i /org/freedesktop/UPower/devices/battery_BAT1 | awk '{print $2}' | head -n 1) 
+    
+    [[ $togg != "BAT1" ]] || 
+   (
+    # add var inside the barckts to stop back messageing from cat 
+    charg=$(cat /sys/class/power_supply/BAT1/capacity)
+    state=$(cat /sys/class/power_supply/BAT1/status)
+    
+    ( [[ $state == "Charging" ]] &&  echo "C $charg" ) ||
+    ( [[ $state == "Discharging" ]] && echo "$charg" ) ||
+    ( [[ $state == "Full" ]] && echo $state ) &
+   )
+}
+
+brightness(){
+    printf "%.0f%s\n" "$(xbacklight)"
+}
+
+sound(){
+    mut=$(amixer sget Master | tail -n1 | sed -r "s/.*\[(.*)\]/\1/")
+    vol=$(amixer get Master | tail -n1 | sed -r "s/.*\[(.*)%\].*/\1/")
+    
+    ( [[ $mut == 'off' ]] && echo $mut ) || ( # must be first
+        ( [[ $vol -le 200 ]] && echo $vol ) ||
+        ( [[ $vol -gt 200 ]] && echo '✘' ) ) &
+}
+
+wifi (){
+    conn=$(nmcli general | awk 'NR==2 {print $1}')
+    wifistate=$(nmcli general | awk 'NR==2 {print $4}')
+    name=$(nmcli -a | grep "wlp3s0:" | awk 'NR==1 {print$4}')
+
+    ( [[ $wifistate == "disabled" && $conn == "disconnected" ]] && echo "airplane mode" ) || (
+    ( [[ $wifistate == "enabled" && $conn == "disconnected" ]] && echo "not wifi added" ) || (  
+        ( [[ $wifistate == "enabled" && $conn == "connecting" ]] && echo "wifi enabled/connecting" ) ||
+        ( [[ $wifistate == "enabled" && $conn == "connected" ]] && echo $name ) 
+                ) || echo "something else" ) &
+        # left: signal download upload, consumed capacity up/down
+}
+
+storage (){
+echo $(inxi -p | grep -i -E "id-1|id-3" | awk 'NR==1 {print "["$7"/"$4"]"};NR==2 {print "["$7"/"$4"]"}') &
+}
+
+# left: cpu
+
+while true
+do
+    xsetroot -name " $(printDate) $(battery) $(wifi) "
+sleep 5s
+done

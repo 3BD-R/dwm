@@ -1,0 +1,84 @@
+#!/bin/env bash
+# 
+# printDate (){ 
+#     date "+%R %a %d" 
+# }
+# 
+# raam (){
+#     #echo $(inxi -jm | awk 'NR==2 {print "╠  "$6" : "$3 "  ╍ "};NR==6 {print $9" : "$6"  ╣"}') &
+#     echo $(inxi -jm | awk 'NR==2 {print $6};NR==6 {print $9}') &
+#     
+# }  
+# 
+# keylayout (){
+#     
+#     ( ([[ $(xset -q|grep LED| awk '{ print $10 }') == "00000000" ]] && echo 'num lock') ||
+#         ( [[ $(xset -q|grep LED| awk '{ print $10 }') == "00000002" ]] && echo 'en' ) || 
+#         ( [[ $(xset -q|grep LED| awk '{ print $10 }') == "00001002" ]] && echo 'ar' ) 
+#     ) || echo 'unknown' &
+# 
+# }
+# 
+# battery (){
+# 
+#     # BAT1 maybe diff
+#     togg=$(upower -i /org/freedesktop/UPower/devices/battery_BAT1 | awk '{print $2}' | head -n 1) 
+#     
+#     [[ $togg != "BAT1" ]] || 
+#    (
+#     # add var inside the barckts to stop back messageing from cat 
+#     charg=$(cat /sys/class/power_supply/BAT1/capacity)
+#     state=$(cat /sys/class/power_supply/BAT1/status)
+#     
+#     ( [[ $state == "Charging" ]] &&  echo "C $charg" ) ||
+#     ( [[ $state == "Discharging" ]] && echo "$charg" ) ||
+#     ( [[ $state == "Full" ]] && echo $state ) &
+#    )
+# }
+# 
+# brightness(){
+#     printf "%.0f%s\n" "$(xbacklight)"
+# }
+# 
+# sound(){
+#     mut=$(amixer sget Master | tail -n1 | sed -r "s/.*\[(.*)\]/\1/")
+#     vol=$(amixer get Master | tail -n1 | sed -r "s/.*\[(.*)%\].*/\1/")
+#     
+#     ( [[ $mut == 'off' ]] && echo $mut ) || ( # must be first
+#         ( [[ $vol -le 200 ]] && echo $vol ) ||
+#         ( [[ $vol -gt 200 ]] && echo '✘' ) ) &
+# }
+# 
+wifi (){
+    conn=$(nmcli -t -f STATE general)
+    wifistate=$(nmcli -t -f WIFI general)
+    noacc=$(nmcli -t -f CONNECTIVITY general)
+    name=$(nmcli -t -f name connection show --active)
+    consumdRX=$(ifconfig wlp3s0 | awk 'NR==6 {print $6}' | cut -d'(' -f 2)
+    consumdRX2=$(ifconfig wlp3s0 | awk 'NR==6 {print $6,$7}')
+    consumdTX=$(ifconfig wlp3s0 | awk 'NR==8 {print $6}' | cut -d'(' -f 2)
+    consumdTX2=$(ifconfig wlp3s0 | awk 'NR==8 {print $6,$7}')
+
+    ( [ $wifistate == 'disabled' ] && echo 'Airplane Mode' ) || 
+    ( [[ $wifistate == 'enabled' && $conn == 'disconnected' ]] && echo 'Enabled/Disconnected' ) ||   
+    ( [[ $wifistate == 'enabled' && $conn == 'connecting' ]] && echo 'Connecting...' ) ||
+    ( [[ $wifistate == 'enabled' && $conn == 'connected' ]] && ( echo $name $consumdTX2 $consumdRX2 & )) || 
+    ( [ $noacc == 'limited' ] && echo 'No access' )  || 
+    echo 'something else'  &
+        # left: download upload
+}
+wifi
+
+# 
+# storage (){
+# echo $(inxi -p | grep -i -E "id-1|id-3" | awk 'NR==1 {print "["$7"/"$4"]"};NR==2 {print "["$7"/"$4"]"}') &
+# }
+# 
+# # left: cpu
+# 
+# while true
+# do
+#     xsetroot -name " $(printDate) $(battery) $(wifi) "
+# sleep 5s
+# done
+
