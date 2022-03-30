@@ -5,7 +5,7 @@
  *
  * font: see http://freedesktop.org/software/fontconfig/fontconfig-user.html
  */
-static char *font = "Liberation Mono:pixelsize=13:antialias=true:autohint=true:bold";
+static char *font = "Liberation Mono:pixelsize=14:antialias=true:autohint=true:bold";
 static int borderpx = 2;
 
 /*
