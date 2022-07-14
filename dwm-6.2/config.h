@@ -2,23 +2,25 @@
 
 /* appearance */
 static const unsigned int borderpx  = 1;        /* border pixel of windows */
-static const unsigned int gappx     = 2;        /* gaps between windows */
+static const unsigned int gappx     = 3;        /* gaps between windows */
 static const unsigned int snap      = 32;       /* snap pixel */
 static const int showbar            = 0;        /* 0 means no bar */
-static const int topbar             = 0;        /* 0 means bottom bar */
-static const char *fonts[]          = { "Terminus :style=Bold:size=10", };
+static const int topbar             = 1;        /* 0 means bottom bar */
+static const char *fonts[]          = { "DejaVu Sans  Mono:style=Bold:size=10", };
 static const char dmenufont[]       = "DejaVu Sans:size=10";
+static const char col_gray0[]       = "#111111";
 static const char col_gray1[]       = "#222222";
 static const char col_gray2[]       = "#444444";
 static const char col_gray3[]       = "#bbbbbb";
 static const char col_gray4[]       = "#eeeeee";
 static const char col_cyan[]        = "#559aff";
+static const char col_blue[]        = "#005cfb";
 static const char col_black[]       = "#0f0f0f";
-static const char col_black1[]      = "#100a09";
+static const char col_black1[]      = "#000000";
 static const char *colors[][3]      = {
      /*               fg         bg         border   */
        [SchemeNorm] = { col_gray3, col_gray1, col_gray2 },
-       [SchemeSel]  = { "#cccccc", col_black/*"#830400"*/, "#003ad9" },
+       [SchemeSel]  = { col_gray4, col_blue, col_blue },
 
 };
 
@@ -61,8 +63,8 @@ static const Layout layouts[] = {
 
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
-static const char *dmenucmd[] = { "dmenu_run", "-b", "-i", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_black, "-sf", col_gray4, NULL };
-static const char *termcmd[]  = { "kitty", NULL };
+static const char *dmenucmd[] = { "dmenu_run", "-i", "-m", dmenumon, "-fn", dmenufont,  NULL };
+static const char *termcmd[]  = { "st", NULL };
 /* static const char *termcmd2[] = {"st", NULL}; */
 
 /* enable function keys */
@@ -76,16 +78,16 @@ static Key keys[] = {
 	{ Mod1Mask,                         XK_space,         spawn,               {.v = dmenucmd } },
 	{ Mod1Mask|ControlMask,             XK_z,             spawn,               {.v = termcmd } },
 /*	{ Mod1Mask|ControlMask,             XK_x,             spawn,               {.v = termcmd2 } }, */
-	{ MODKEY,                           XK_F1,            togglebar,           {0} },
-	{ Mod1Mask,                         XK_Tab,           focusstack,          {.i = +1 } },
- /* { MODKEY,                           XK_k,             focusstack,          {.i = -1 } }, */
+	{ MODKEY,                           XK_b,             togglebar,           {0} },
+	{ MODKEY,                           XK_j,             focusstack,          {.i = +1 } },
+    { MODKEY,                           XK_k,             focusstack,          {.i = -1 } }, 
  	{ MODKEY|ShiftMask,                 XK_h,             incnmaster,          {.i = +1 } },
 	{ MODKEY|ShiftMask,                 XK_l,             incnmaster,          {.i = -1 } }, 
     { MODKEY,                           XK_h,             setmfact,            {.f = -0.05} },
 	{ MODKEY,                           XK_l,             setmfact,            {.f = +0.05} },
 	{ MODKEY,                           XK_Return,        zoom,                {0} },
  /* { MODKEY,                           XK_Tab,           view,                {0} }, */
-	{ Mod1Mask,                         XK_F4,            killclient,          {0} },
+	{ MODKEY|ShiftMask,                 XK_c,             killclient,          {0} },
 	{ MODKEY,                           XK_n,             setlayout,           {.v = &layouts[0]} },
 	{ MODKEY,                           XK_f,             setlayout,           {.v = &layouts[1]} },
 	{ MODKEY,                           XK_p,             setlayout,           {.v = &layouts[2]} },
@@ -111,14 +113,13 @@ static Key keys[] = {
 	TAGKEYS(                            XK_9,                                  8)  */
 	{ ControlMask|ShiftMask,            XK_Delete,        spawn,               SHCMD("loginctl terminate-session $(loginctl session-status | awk '{print $1}' | head -n 1)") },
 /*  { ControlMask|ShiftMask|Mod1Mask,   XK_Delete,        quit,                {0} }, */
-    { MODKEY,                           XK_r,             quit,                {0} },
+    { MODKEY|ShiftMask,                 XK_q,             quit,                {0} },
     { 0, XF86XK_MonBrightnessUp,        spawn,                                 SHCMD("brightness up") },
     { 0, XF86XK_MonBrightnessDown,      spawn,                                 SHCMD("brightness down") },
     { 0, XF86XK_AudioMute,              spawn,                                 SHCMD("amixer set Master toggle") },
     { 0, XF86XK_AudioLowerVolume,       spawn,                                 SHCMD("pactl -- set-sink-volume 0 -2%") },
     { 0, XF86XK_AudioRaiseVolume,       spawn,                                 SHCMD("pactl -- set-sink-volume 0 +2%") },
- /* { MODKEY,                           XK_p,             spawn,               SHCMD("albert toggle") },*/
-    { MODKEY,                           XK_Tab,           shiftviewclients,    { .i = +1 } },
+/*  { MODKEY,                           XK_Tab,           shiftviewclients,    { .i = +1 } },*/
     { ControlMask|Mod1Mask,             XK_l,             shiftview,           { .i = +1 } },
     { ControlMask|Mod1Mask,             XK_h,             shiftview,           { .i = -1 } },
  /* { MODKEY,                           XK_i,             shiftviewclients,    { .i = -1 } }, */
@@ -135,7 +136,7 @@ static Button buttons[] = {
 	/* click                event mask      button          function        argument */
 	{ ClkLtSymbol,          0,              Button1,        setlayout,      {0} },
 	{ ClkLtSymbol,          0,              Button3,        setlayout,      {.v = &layouts[2]} },
-/*	{ ClkWinTitle,          0,              Button2,        zoom,           {0} }, */
+/*	{ ClkWinTitle,          0,              Button2,        zoom,           {0} },*/
 	{ ClkStatusText,        0,              Button2,        spawn,          {.v = termcmd } },
 	{ ClkClientWin,         MODKEY,         Button1,        movemouse,      {0} },
     { ClkClientWin,         MODKEY,         Button2,        togglefloating, {0} },

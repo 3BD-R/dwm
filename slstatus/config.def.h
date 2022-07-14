@@ -1,8 +1,8 @@
 /* interval between updates (in ms) */
-const unsigned int interval = 1000;
+const unsigned int interval = 1500;
 
 /* text to show if no value can be retrieved */
-static const char unknown_str[] = "n/a";
+static const char unknown_str[] = "";
 
 /* maximum output string length */
 #define MAXLEN 2048
@@ -63,32 +63,16 @@ static const char unknown_str[] = "n/a";
  */
 static const struct arg args[] = {
 	/* function                 format                                  argument */
-    { separator,                " ",                                        NULL },
-	{ datetime,                 "%s",                             "%R  %a %d %b" },
-    { separator,                "   ",                                      NULL },
-    { battery_perc,             "%s",                                     "BAT1" },
-    { separator,                " ",                                        NULL },
-    { battery_state,            "%s",                                     "BAT1" },
-    { separator,                "   ",                                      NULL },
-    { ram_perc,                 "[%s",                                      NULL },
-    { separator,                " ",                                        NULL },
-    { swap_perc,                "%s]",                                      NULL },
-    { separator,                "  ",                                      NULL }, 
-//    { disk_used,                "[%s ",                                      "/" },
-//    { disk_used,                " %s]",                              "/media/db" },
-
-//     { run_command,              "%s",             "df -h | grep '/dev/sda2' | awk '{print $3}' | rev | cut -c2- | rev" },
-//     { separator,                "/",                                                                              NULL },
-//     { run_command,              "%s",             "df -h | grep '/dev/sda2' | awk '{print $2}' | rev | cut -c2- | rev" },
-//     { separator,                "]   [",                                                                          NULL },
-//     { run_command,              "%s",             "df -h | grep '/media/db' | awk '{print $3}' | rev | cut -c2- | rev" },
-//     { separator,                "/",                                                                              NULL },
-//     { run_command,              "%s",             "df -h | grep '/media/db' | awk '{print $2}' | rev | cut -c2- | rev" },
-//     { separator,                "]   ",                                                                           NULL },
-
-    { keyboard_indicators,      "%s",                                    "c?n?" },
-    { separator,                "  ",                                     NULL },
-    { run_command,              "%s",               "sh ~/.dwm/slstatus/shWifi" },
-    { wifi_perc,                " %s",                                  "wlp3s0" },
-    { separator,                " ",                                       NULL },
+	{ datetime,                 "  %s",                             "%R %a %d %b" },
+    { battery_perc,             "   %s",                                   "BAT1" },
+    { battery_state,            " %s",                                     "BAT1" },
+    { cpu_perc,                 "   %s",                                     NULL },
+    { ram_perc,                 " [%s",                                      NULL },
+    { swap_perc,                " %s]",                                      NULL },
+    { keymap,                   "  %s",                                      NULL },
+    { keyboard_indicators,      "  %s",                                    "c?n?" },
+    { wifi_essid,               "   %s",                                 "wlp3s0" },
+    { wifi_perc,                " %s",                                 "wlp3s0" },
+    { netspeed_rx,              "  %s",     "wlp3s0"},
+    { netspeed_tx,              " %s",     "wlp3s0"},
 };

@@ -50,22 +50,28 @@
 # }
 # 
 wifi (){
-    conn=$(nmcli -t -f STATE general)
-    wifistate=$(nmcli -t -f WIFI general)
-    noacc=$(nmcli -t -f CONNECTIVITY general)
-    name=$(nmcli -t -f name connection show --active)
-    consumdRX=$(ifconfig wlp3s0 | awk 'NR==6 {print $6}' | cut -d'(' -f 2)
-    consumdRX2=$(ifconfig wlp3s0 | awk 'NR==6 {print $6,$7}')
-    consumdTX=$(ifconfig wlp3s0 | awk 'NR==8 {print $6}' | cut -d'(' -f 2)
-    consumdTX2=$(ifconfig wlp3s0 | awk 'NR==8 {print $6,$7}')
+   # conn=$(nmcli -t -f STATE general)
+   # wifistate=$(nmcli -t -f WIFI general)
+   # noacc=$(nmcli -t -f CONNECTIVITY general)
+   # name=$(nmcli -t -f name connection show --active | awk 'NR==1')
+   # consumdRX=$(ifconfig wlp3s0 | awk 'NR==6 {print $6}' | cut -d'(' -f 2)
+   # consumdRX2=$(ifconfig wlp3s0 | awk 'NR==6 {print $6,$7}')
+   # consumdTX=$(ifconfig wlp3s0 | awk 'NR==8 {print $6}' | cut -d'(' -f 2)
+   # consumdTX2=$(ifconfig wlp3s0 | awk 'NR==8 {print $6,$7}')
 
-    ( [ $wifistate == 'disabled' ] && echo 'Airplane Mode' ) || 
-    ( [[ $wifistate == 'enabled' && $conn == 'disconnected' ]] && echo 'Enabled/Disconnected' ) ||   
-    ( [[ $wifistate == 'enabled' && $conn == 'connecting' ]] && echo 'Connecting...' ) ||
-    ( [[ $wifistate == 'enabled' && $conn == 'connected' ]] && ( echo $name $consumdTX2 $consumdRX2 & )) || 
-    ( [ $noacc == 'limited' ] && echo 'No access' )  || 
-    echo 'something else'  &
+   # ( [ $wifistate == 'disabled' ] && echo 'Airplane Mode' ) || 
+   # ( [[ $wifistate == 'enabled' && $conn == 'disconnected' ]] && echo 'Enabled/Disconnected' ) ||   
+   # ( [[ $wifistate == 'enabled' && $conn == 'connecting' ]] && echo 'Connecting...' ) ||
+   # ( [[ $wifistate == 'enabled' && $conn == 'connected' ]] && ( echo $name $consumdTX2 $consumdRX2 & )) || 
+   # ( [ $noacc == 'limited' ] && echo 'No access' )  || 
+   # echo 'something else'  &
         # left: download upload
+    ( [ $(nmcli -t -f WIFI general) == 'disabled' ] && echo 'Airplane Mode' ) || 
+    ( [[ $(nmcli -t -f WIFI general) == 'enabled' && $(nmcli -t -f STATE general) == 'connected' ]] && ( echo $(nmcli -t -f name connection show --active | awk 'NR==1') $(ifconfig wlp3s0 | awk 'NR==8 {print $6,$7}') $(ifconfig wlp3s0 | awk 'NR==6 {print $6,$7}') & )) || 
+    ( [[ $(nmcli -t -f WIFI general) == 'enabled' && $(nmcli -t -f STATE general) == 'disconnected' ]] && echo 'Enabled/Disconnected' ) ||   
+    ( [[ $(nmcli -t -f WIFI general) == 'enabled' && $(nmcli -t -f STATE general) == 'connecting' ]] && echo 'Connecting...' ) ||
+    ( [ $(nmcli -t -f CONNECTIVITY general) == 'limited' ] && echo 'No access' ) || echo 'something else'  &
+
 }
 wifi
 

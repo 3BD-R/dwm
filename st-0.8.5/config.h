@@ -5,7 +5,7 @@
  *
  * font: see http://freedesktop.org/software/fontconfig/fontconfig-user.html
  */
-static char *font = "Liberation Mono:pixelsize=14:antialias=true:autohint=true:bold";
+static char *font = "Liberation Mono:pixelsize=14:antialias=true:autohint=true";
 static int borderpx = 0;
 
 /*
@@ -150,10 +150,10 @@ static const char *colorname[] = {
 	[255] = 0,
 
 	/* more colors can be added after 255 to use with DefaultXX */
-	"green", // cursor color
+	"white", // cursor color
 	"#555555",
 	"gray90", /* default foreground colour */
-	"black", /* default background colour */
+	"#101010", /* default background colour */
 };
 
 
@@ -222,8 +222,8 @@ static MouseShortcut mshortcuts[] = {
 	/* mask                 button   function        argument       release */
     //{ ShiftMask,            Button4, kscrollup,      {.i = 1} },
     //{ ShiftMask,            Button5, kscrolldown,    {.i = 1} },
-    { XK_ANY_MOD,           Button4, kscrollup,      {.i = mousescrollincrement},      0, /* !alt */ -1 },
-    { XK_ANY_MOD,           Button5, kscrolldown,    {.i = mousescrollincrement},      0, /* !alt */ -1 },
+    { 0,           Button4, kscrollup,      {.i = mousescrollincrement},      0, /* !alt */ -1 },
+    { 0,           Button5, kscrolldown,    {.i = mousescrollincrement},      0, /* !alt */ -1 },
     { XK_ANY_MOD,           Button2, selpaste,       {.i = 0},      1 },
 	{ ShiftMask,            Button4, ttysend,        {.s = "\033[5;2~"} },
 	{ XK_ANY_MOD,           Button4, ttysend,        {.s = "\031"} },
@@ -249,8 +249,8 @@ static Shortcut shortcuts[] = {
 	{ TERMMOD,              XK_Y,             selpaste,       {.i =  0} },
 	{ ShiftMask,            XK_Insert,        selpaste,       {.i =  0} },
 	{ TERMMOD,              XK_Num_Lock,      numlock,        {.i =  0} },
-    { ShiftMask,            XK_Page_Up,       kscrollup,      {.i = -1} },
-    { ShiftMask,            XK_Page_Down,     kscrolldown,    {.i = -1} },
+    { TERMMOD,            XK_Up,       kscrollup,      {.i = -1} },
+    { TERMMOD,            XK_Down,     kscrolldown,    {.i = -1} },
     { TERMMOD,              XK_N,             newterm,        {.i =  0} },
 };
 
