@@ -1,4 +1,4 @@
 #!/bin/bash
-cd ~/.dwm/slstatus/ && rm config.h && make && sudo make install 
+rm config.h && make && sudo make install 
 pgrep slstatus | xargs -n 1 kill -15 & 
 

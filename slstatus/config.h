@@ -63,16 +63,16 @@ static const char unknown_str[] = "";
  */
 static const struct arg args[] = {
 	/* function                 format                                  argument */
-	{ datetime,                 "  %s",                             "%R %a %d %b" },
-    { battery_perc,             "   %s",                                   "BAT1" },
-    { battery_state,            " %s",                                     "BAT1" },
-    { cpu_perc,                 "   %s",                                     NULL },
-    { ram_perc,                 " [%s",                                      NULL },
-    { swap_perc,                " %s]",                                      NULL },
-    { keymap,                   "  %s",                                      NULL },
-    { keyboard_indicators,      "  %s",                                    "c?n?" },
-    { wifi_essid,               "   %s",                                 "wlp3s0" },
+    { wifi_essid,               "    %s",                                 "wlp3s0" },
     { wifi_perc,                " %s",                                 "wlp3s0" },
-    { netspeed_rx,              "  %s",     "wlp3s0"},
-    { netspeed_tx,              " %s",     "wlp3s0"},
+    { netspeed_tx,              "    %s",     "wlp3s0"},
+    { netspeed_rx,              " %s",     "wlp3s0"},
+    { cpu_perc,                 "    [ %s",                                     NULL },
+    { ram_perc,                 " | %s",                                      NULL },
+    { swap_perc,                " %s]",                                      NULL },
+    { keymap,                   "    %s",                                      NULL },
+    { keyboard_indicators,      "    %s",                                    "c?n?" },
+    { battery_perc,             "    [%s",                                   "BAT1" },
+    { battery_state,            " %s]",                                     "BAT1" },
+	{ datetime,                 "   %s",                             "%R %a %d %b %m " },
 };
