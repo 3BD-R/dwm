@@ -1,13 +1,14 @@
 /* See LICENSE file for copyright and license details. */
 
+
 /* appearance */
 static const unsigned int borderpx  = 1;        /* border pixel of windows */
 static const unsigned int gappx     = 3;        /* gaps between windows */
 static const unsigned int snap      = 32;       /* snap pixel */
 static const int showbar            = 0;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
-static const char *fonts[]          = { "DejaVu Sans  Mono:style=Bold:size=10", };
-static const char dmenufont[]       = "DejaVu Sans:size=10";
+static const char *fonts[]          = { "monospace:size=10", };
+static const char dmenufont[]       = "monospace:size=10";
 static const char col_gray0[]       = "#111111";
 static const char col_gray1[]       = "#222222";
 static const char col_gray2[]       = "#444444";
@@ -25,7 +26,7 @@ static const char *colors[][3]      = {
 };
 
 /* tagging */
-static const char *tags[] = { ">_", "II", "III","@_"};
+static const char *tags[] = { ">_", "{}", "III","@_"};
 
 static const Rule rules[] = {
 	/* xprop(1):
@@ -70,47 +71,57 @@ static const char *termcmd[]  = { "st", NULL };
 /* enable function keys */
 #include <X11/XF86keysym.h>
 
+/* backlight */
+static const char *light_up[]   = {"xbacklight", "-inc", "5", NULL};
+static const char *light_down[] = {"xbacklight", "-dec", "5", NULL};
+
+/* volume */
+static const char *muteAudio[]  = {"pactl", "set-sink-mute", "0", "toggle", NULL};
+static const char *volumeUp[]   = {"pactl", "set-sink-volume", "0", "+2%", NULL};
+static const char *volumeDown[] = {"pactl", "set-sink-volume", "0", "-2%", NULL};
+
 static Key keys[] = {
-	/* modifier                         key                function             argument */
-	{ MODKEY,                           XK_p,              spawn,               {.v = dmenucmd } },
-	{ Mod1Mask|ControlMask,             XK_z,              spawn,               {.v = termcmd } },
-	{ MODKEY,                           XK_b,              togglebar,           {0} },
-	{ MODKEY,                           XK_j,              focusstack,          {.i = +1 } },
-    { MODKEY,                           XK_k,              focusstack,          {.i = -1 } }, 
- 	{ MODKEY,                           XK_i,              incnmaster,          {.i = +1 } },
-	{ MODKEY,                           XK_d,              incnmaster,          {.i = -1 } }, 
-    { MODKEY,                           XK_h,              setmfact,            {.f = -0.05} },
-	{ MODKEY,                           XK_l,              setmfact,            {.f = +0.05} },
-	{ MODKEY,                           XK_Return,         zoom,                {0} },
-    { MODKEY,                           XK_Tab,            view,                {0} },
-	{ MODKEY|ShiftMask,                 XK_c,              killclient,          {0} },
-	{ MODKEY,                           XK_t,              setlayout,           {.v = &layouts[0]} },
-	{ MODKEY,                           XK_f,              setlayout,           {.v = &layouts[1]} },
-	{ MODKEY,                           XK_m,              setlayout,           {.v = &layouts[2]} },
-    { MODKEY,                           XK_v,              setlayout,           {0} }, 
-	{ MODKEY|Mod1Mask,                  XK_p,              togglefloating,      {0} },
-    { MODKEY,                           XK_0,              view,                {.ui = ~0 } },
-//	{ MODKEY|ShiftMask,                 XK_0,              tag,                 {.ui = ~0 } },
-//	{ MODKEY,                           XK_comma,          focusmon,            {.i = -1 } },
-//	{ MODKEY,                           XK_period,         focusmon,            {.i = +1 } },
-//	{ MODKEY|ShiftMask,                 XK_comma,          tagmon,              {.i = -1 } },
-//	{ MODKEY|ShiftMask,                 XK_period,         tagmon,              {.i = +1 } },
-	{ MODKEY,                           XK_minus,          setgaps,             {.i = -1 } },
-	{ MODKEY,                           XK_equal,          setgaps,             {.i = +1 } },
-	{ MODKEY|Mod1Mask,                  XK_equal,          setgaps,             {.i = 0  } },
+	/* modifier                         key                 function            argument */
+	{ MODKEY,                           XK_p,               spawn,              {.v = dmenucmd } },
+	{ MODKEY|ShiftMask,                 XK_Return,          spawn,              {.v = termcmd } },
+	{ MODKEY,                           XK_b,               togglebar,          {0} },
+	{ MODKEY,                           XK_j,               focusstack,         {.i = +1 } },
+    { MODKEY,                           XK_k,               focusstack,         {.i = -1 } }, 
+ 	{ MODKEY,                           XK_i,               incnmaster,         {.i = +1 } },
+	{ MODKEY,                           XK_d,               incnmaster,         {.i = -1 } }, 
+    { MODKEY,                           XK_h,               setmfact,           {.f = -0.05} },
+	{ MODKEY,                           XK_l,               setmfact,           {.f = +0.05} },
+	{ MODKEY,                           XK_Return,          zoom,               {0} },
+    { MODKEY,                           XK_Tab,             view,               {0} },
+	{ MODKEY|ShiftMask,                 XK_c,               killclient,         {0} },
+	{ MODKEY,                           XK_t,               setlayout,          {.v = &layouts[0]} },
+	{ MODKEY,                           XK_f,               setlayout,          {.v = &layouts[1]} },
+	{ MODKEY,                           XK_m,               setlayout,          {.v = &layouts[2]} },
+//  { MODKEY,                           XK_space,           setlayout,          {0} }, 
+	{ MODKEY|Mod1Mask,                  XK_p,               togglefloating,     {0} },
+    { MODKEY,                           XK_0,               view,               {.ui = ~0 } },
+//	{ MODKEY|ShiftMask,                 XK_0,               tag,                {.ui = ~0 } },
+	{ MODKEY,                           XK_comma,           focusmon,           {.i = -1 } },
+	{ MODKEY,                           XK_period,          focusmon,           {.i = +1 } },
+	{ MODKEY|ShiftMask,                 XK_comma,           tagmon,             {.i = -1 } },
+	{ MODKEY|ShiftMask,                 XK_period,          tagmon,             {.i = +1 } },
+	{ MODKEY,                           XK_minus,           setgaps,            {.i = -1 } },
+	{ MODKEY,                           XK_equal,           setgaps,            {.i = +1 } },
+	{ MODKEY|Mod1Mask,                  XK_equal,           setgaps,            {.i = 0  } },
     TAGKEYS(                            XK_1,                                   0)
 	TAGKEYS(                            XK_2,                                   1)
 	TAGKEYS(                            XK_3,                                   2)
     TAGKEYS(                            XK_4,                                   3)
-	{ ControlMask|ShiftMask,            XK_Delete,         spawn,               SHCMD("loginctl terminate-session $(loginctl session-status | awk '{print $1}' | head -n 1)") },
-    { MODKEY|ShiftMask,                 XK_q,              quit,                {0} },
-    { 0, XF86XK_MonBrightnessUp,                           spawn,               SHCMD("xbacklight -inc 3")},
-    { 0, XF86XK_MonBrightnessDown,                         spawn,               SHCMD("xbacklight -dec 3")},
-    { 0, XF86XK_AudioMute,                                 spawn,               SHCMD("amixer set Master toggle")},
-    { 0, XF86XK_AudioRaiseVolume,                          spawn,               SHCMD("pactl set-sink-volume 0 +2%")},
-    { 0, XF86XK_AudioLowerVolume,                          spawn,               SHCMD("pactl set-sink-volume 0 -2%")},
-    { 0,                                XK_Print,          spawn,               SHCMD("maim /media/db/pictures/$(date +%Y%m%d%k%M%S).png && notify-send 'screenshot taken' -t 550")},
-    { ControlMask,                      XK_Print,          spawn,               SHCMD("maim -s /media/db/pictures/$(date +%Y%m%d%k%M%S).png && notify-send 'screenshot taken' -t 550")},
+	{ ControlMask|ShiftMask,            XK_Delete,          spawn,              SHCMD("loginctl terminate-session $(loginctl session-status | awk '{print $1}' | head -n 1)") },
+    { MODKEY|ShiftMask,                 XK_q,               quit,               {0} },
+    { 0, XF86XK_MonBrightnessUp,                            spawn,              {.v = light_up} }, 
+    { 0, XF86XK_MonBrightnessDown,                          spawn,              {.v = light_down} },
+    { 0, XF86XK_AudioMute,                                  spawn,              {.v = muteAudio} },
+    { 0, XF86XK_AudioRaiseVolume,                           spawn,              {.v = volumeUp} },
+    { 0, XF86XK_AudioLowerVolume,                           spawn,              {.v = volumeDown} },
+    { 0,                                XK_Print,           spawn,              SHCMD("maim  /media/db/pictures/$(date +%Y%m%d%H%M%S).png && notify-send 'screenshot taken' -t 550") },
+    { ControlMask,                      XK_Print,           spawn,              SHCMD("maim -s /media/db/pictures/$(date +%Y%m%d%H%M%S).png && notify-send 'screenshot taken' -t 550") },
+    { Mod1Mask,                         XK_space,           spawn,              SHCMD("[ $(setxkbmap -query | grep layout | cut -d':' -f 2) = 'us' ] && setxkbmap ara || setxkbmap us") },
 };
 
 /* button definitions */
