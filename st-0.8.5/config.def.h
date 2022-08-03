@@ -5,7 +5,8 @@
  *
  * font: see http://freedesktop.org/software/fontconfig/fontconfig-user.html
  */
-static char *font = "Liberation Mono:pixelsize=14:antialias=true:autohint=true";
+//static char *font = "Liberation Mono:pixelsize=14:antialias=true:autohint=true";
+static char *font = "SF Mono:pixelsize=14:antialias=true:autohint=true";
 static int borderpx = 0;
 
 /*
@@ -220,8 +221,8 @@ static uint forcemousemod = ShiftMask;
 const unsigned int mousescrollincrement = 3;
 static MouseShortcut mshortcuts[] = {
 	/* mask                 button   function        argument       release */
-    { 0,                    Button4, kscrollup,      {.i = mousescrollincrement} },
-    { 0,                    Button5, kscrolldown,    {.i = mousescrollincrement} },
+    { XK_NO_MOD,                    Button4, kscrollup,      {.i = mousescrollincrement} },
+    { XK_NO_MOD,                    Button5, kscrolldown,    {.i = mousescrollincrement} },
     { XK_ANY_MOD,           Button2, selpaste,       {.i = 0},      1 },
 	{ ShiftMask,            Button4, ttysend,        {.s = "\033[5;2~"} },
 	{ XK_ANY_MOD,           Button4, ttysend,        {.s = "\031"} },
@@ -241,14 +242,14 @@ static Shortcut shortcuts[] = {
 	{ XK_ANY_MOD,               XK_Print,         printsel,       {.i =  0} },
 	{ TERMMOD,                  XK_plus,          zoom,           {.f = +1} },
     { TERMMOD,                  XK_underscore,    zoom,           {.f = -1} },
-    { TERMMOD,                  XK_Home,          zoomreset,      {.f =  0} },
+    { TERMMOD,                  XK_equal,         zoomreset,      {.f =  0} },
 	{ TERMMOD,                  XK_C,             clipcopy,       {.i =  0} },
 	{ TERMMOD,                  XK_V,             clippaste,      {.i =  0} },
 	{ TERMMOD,                  XK_Y,             selpaste,       {.i =  0} },
 	{ ShiftMask,                XK_Insert,        selpaste,       {.i =  0} },
 	{ TERMMOD,                  XK_Num_Lock,      numlock,        {.i =  0} },
-    { TERMMOD,                  XK_Up,            kscrollup,      {.i = mousescrollincrement} },
-	{ TERMMOD,                  XK_Down,          kscrolldown,    {.i = mousescrollincrement} },
+    { TERMMOD,                  XK_K,            kscrollup,      {.i = mousescrollincrement} },
+	{ TERMMOD,                  XK_J,          kscrolldown,    {.i = mousescrollincrement} },
     { TERMMOD,                  XK_N,             newterm,        {.i =  0} },
 };
 
