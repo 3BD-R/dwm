@@ -597,8 +597,8 @@ configurenotify(XEvent *e)
 		if (updategeom() || dirty) {
 			drw_resize(drw, sw, bh);
 			updatebars();
-		/*	for (m = mons; m; m = m->next) {
-				for (c = m->clients; c; c = c->next)
+			for (m = mons; m; m = m->next) {
+			/*k	for (c = m->clients; c; c = c->next)
 					if (c->isfullscreen)
 						resizeclient(c, m->mx, m->my, m->mw, m->mh);  */
 				XMoveResizeWindow(dpy, m->barwin, m->wx, m->by, m->ww, bh);
@@ -607,7 +607,7 @@ configurenotify(XEvent *e)
 			arrange(NULL);
 		}
 	}
-/* } */
+ } 
 
 void
 configurerequest(XEvent *e)
