@@ -28,7 +28,8 @@ static const char *colors[][3]      = {
 static const char *const autostart[] = {
     "rfkill", "block", "bluetooth", NULL,
 	"slstatus", NULL,
-	NULL /* terminate */
+	"changBg", NULL,
+    NULL /* terminate */
 };
 
 /* tagging */
@@ -67,12 +68,13 @@ static const Layout layouts[] = {
 	{ MODKEY|ControlMask|ShiftMask, KEY,      toggletag,      {.ui = 1 << TAG} },  */
 
 /* helper for spawning shell commands in the pre dwm-5.0 fashion */
-#define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
+#define SHCMD(cmd) { .v = (const char*[]){ "/bin/zsh", "-c", cmd, NULL } }
 
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[] = { "dmenu_run", "-i", "-m", dmenumon, "-fn", dmenufont, "-nb", col_black1, "-nf", col_gray3, "-sb", col_blue, "-sf", col_gray4, NULL };
 static const char *termcmd[]  = { "st", NULL };
+static const char *lockcmd[]  = { "slock", NULL};
 
 /* enable function keys */
 #include <X11/XF86keysym.h>
@@ -120,6 +122,7 @@ static Key keys[] = {
     TAGKEYS(                            XK_4,                                   3)
 	{ MODKEY|ShiftMask,                 XK_q,               spawn,              SHCMD("loginctl terminate-session $(loginctl session-status | awk '{print $1}' | head -n 1)") },
     { MODKEY,                           XK_r,               quit,               {0} },
+    { MODKEY|ShiftMask,                 XK_l,               spawn,              {.v = lockcmd} },
     { 0, XF86XK_MonBrightnessUp,                            spawn,              {.v = light_up} }, 
     { 0, XF86XK_MonBrightnessDown,                          spawn,              {.v = light_down} },
     { 0, XF86XK_AudioMute,                                  spawn,              {.v = muteAudio} },
@@ -127,6 +130,7 @@ static Key keys[] = {
     { 0, XF86XK_AudioLowerVolume,                           spawn,              {.v = volumeDown} },
     { 0,                                XK_Print,           spawn,              SHCMD("maim  /media/db/pictures/$(date +%Y%m%d%H%M%S).png && notify-send 'screenshot taken' -t 550") },
     { ControlMask,                      XK_Print,           spawn,              SHCMD("maim -s /media/db/pictures/$(date +%Y%m%d%H%M%S).png && notify-send 'screenshot taken' -t 550") },
+    //{ Mod1Mask,                         XK_space,           spawn,              SHCMD("[ $(setxkbmap -query | grep layout | cut -d':' -f 2) = 'us' ] && setxkbmap ara || setxkbmap us") },
     { Mod1Mask,                         XK_space,           spawn,              SHCMD("[ $(setxkbmap -query | grep layout | cut -d':' -f 2) = 'us' ] && setxkbmap ara || setxkbmap us") },
 };
 
