@@ -154,7 +154,7 @@ static const char *colorname[] = {
 	"white", // cursor color
 	"#555555",
 	"gray90", /* default foreground colour */
-	"#101010", /* default background colour */
+	"#222222", /* default background colour */
 };
 
 
@@ -186,7 +186,7 @@ static unsigned int defaultrcs = 257;
  * 7: Snowman ("☃")
  */
 // static unsigned int cursorshape = 6;
-static unsigned int cursorstyle = 0;
+static unsigned int cursorstyle = 1;
 /*
  * Default columns and rows numbers
  */
