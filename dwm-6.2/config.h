@@ -118,8 +118,9 @@ static Key keys[] = {
 	TAGKEYS(                            XK_3,                                   2)
     TAGKEYS(                            XK_4,                                   3)
     TAGKEYS(                            XK_5,                                   4)
-	{ MODKEY|ShiftMask,                 XK_q,               spawn,              SHCMD("loginctl terminate-session $(loginctl session-status | awk '{print $1}' | head -n 1)") },
-    { MODKEY,                           XK_r,               quit,               {0} },
+//	{ MODKEY|ShiftMask,                 XK_q,               spawn,              SHCMD("loginctl terminate-session $(loginctl session-status | awk '{print $1}' | head -n 1)") },
+	{ MODKEY,                           XK_r,               quit,               {1} }, 
+    { MODKEY,                           XK_q,               quit,               {0} },
     { MODKEY|ShiftMask,                 XK_l,               spawn,              {.v = lockcmd} },
     { 0, XF86XK_MonBrightnessUp,                            spawn,              {.v = light_up} }, 
     { 0, XF86XK_MonBrightnessDown,                          spawn,              {.v = light_down} },
