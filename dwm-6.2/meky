@@ -1,5 +1,5 @@
 #!/bin/bash
-rm config.h && make && sudo make install 
+rm config.h && make && sudo make clean install 
 
 
 

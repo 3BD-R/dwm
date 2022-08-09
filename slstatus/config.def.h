@@ -72,7 +72,6 @@ static const struct arg args[] = {
     { swap_perc,                " %s]",                                      NULL },
     { disk_perc,                " [%s",                                   "/"},
     { disk_perc,                " %s]",                                   "/media/db"},
-    { keymap,                   " %s",                                      NULL },
     { keyboard_indicators,      " %s",                                    "c?n?" },
 	{ datetime,                 "  %s",                             "%R %A %d %B %m" },
     { battery_state,            "  [%s",                                     "BAT1" },
